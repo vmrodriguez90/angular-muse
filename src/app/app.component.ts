@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { MuseClient, channelNames } from 'muse-js';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
@@ -19,7 +20,7 @@ export class AppComponent {
   leftBlinks: Observable<number>;
   rightBlinks: Observable<number>;
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.muse.connectionStatus.subscribe(newStatus => {
       this.connected = newStatus;
     });
@@ -53,6 +54,14 @@ export class AppComponent {
           Observable.timer(500).map(() => 0)
         )
       );
+
+    this.leftBlinks.subscribe(p => {
+      if (p === 0) {
+        this.http.get('https://maker.ifttt.com/trigger/move_arm/with/key/h088zi5G2m50ZdgUZRrwLSTNWi2R01FzgbSvKkLtqV0')
+          .first().subscribe(p => console.log(p));
+      }
+    });
+
   }
 
   disconnect() {
