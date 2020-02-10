@@ -36,7 +36,7 @@ export class AppComponent {
     this.leftBlinks = this.muse.eegReadings
       .filter(r => r.electrode === leftEyeChannel)
       .map(r => Math.max(...r.samples.map(n => Math.abs(n))))
-      .filter(max => max > 500)
+      .filter(max => max > 700)
       .switchMap(() =>
         Observable.merge(
           Observable.of(1),
